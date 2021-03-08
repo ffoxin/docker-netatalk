@@ -54,9 +54,13 @@ fi
 chgrp netatalk-files /media/timemachine
 chmod g+rwx /media/timemachine
 
-sed -i'' -e "s,%AFP_NAME%,${AFP_NAME:-},g" /etc/netatalk/afp.conf
-sed -i'' -e "s,%AFP_SPOTLIGHT%,${AFP_SPOTLIGHT:-},g" /etc/netatalk/afp.conf
-sed -i'' -e "s,%AFP_ZEROCONF%,${AFP_ZEROCONF:-},g" /etc/netatalk/afp.conf
+if [ ! -e "/etc/afp.conf" ]; then
+  sed -i'' -e "s,%AFP_NAME%,${AFP_NAME:-},g" /etc/netatalk/afp.conf
+  sed -i'' -e "s,%AFP_SPOTLIGHT%,${AFP_SPOTLIGHT:-},g" /etc/netatalk/afp.conf
+  sed -i'' -e "s,%AFP_ZEROCONF%,${AFP_ZEROCONF:-},g" /etc/netatalk/afp.conf
+else
+  ln -sf /etc/afp.conf /etc/netatalk/afp.conf
+fi
 
 # Start dbus
 mkdir -p /var/run/dbus
